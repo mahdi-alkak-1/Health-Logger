@@ -8,7 +8,7 @@ class User extends Model{
     private string $password;
     private string $role;
     private int $is_active; 
-    private string $auth_token;
+    private ? string $auth_token;
     private string $created_at;
     private string $updated_at;
 
@@ -22,7 +22,7 @@ class User extends Model{
         $this->password = $data["password"];
         $this->role = $data["role"];
         $this->is_active = $data["is_active"];
-        $this->auth_token = $data["auth_token"];
+        $this->auth_token = $data["auth_token"] ?? null;
         $this->created_at = $data["created_at"];
         $this->updated_at = $data["updated_at"];
     }
@@ -31,7 +31,7 @@ class User extends Model{
         $sql = sprintf("SELECT * FROM users WHERE email = ? LIMIT 1");
         $query = $connection->prepare($sql);
         $query->bind_param('s', $email);
-        $query->execute();
+        $query->execute ();
 
         $data = $query->get_result()->fetch_assoc();
         

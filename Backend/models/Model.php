@@ -32,9 +32,9 @@ abstract class Model{
 
         foreach($value as $v){
             if(is_int($v)){
-              $type .= 'i';
+              $types .= 'i';
             }else{
-                $type .= 's';
+                $types .= 's';
             }
         }
 

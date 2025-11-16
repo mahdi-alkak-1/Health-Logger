@@ -32,6 +32,36 @@ class AuthService{
         return ResponseService::response(201,  "User registered", $userData);
     }
 
+    public static function loginUser(mysqli $connection, string $email, string $password){
+
+        $user = User::findByEmail($connection, $email);
+
+        if(!$user){
+            return ResponseService::response(404, "User not found");
+        }
+
+        if($user->getIsActive() == 0){
+            return ResponseService::response(403, "User is inactive");
+        }
+
+        $checkpass = password_verify($password, $user->getPassword());
+
+         if(!$checkpass){
+            return   ResponseService::response(401, "Invalid Credentials");
+        }
+        
+        // $token = $user->getAuthToken();
+
+        $userData = [
+            "id" => $user->getId(),
+            "email" => $user->getEmail(),
+            "role" => $user->getRole(),
+            "token" => $user->getAuthToken(),
+        ];
+
+        return ResponseService::response(200, "Loging Successful", $userData);
+    } 
+
 
 }
 
