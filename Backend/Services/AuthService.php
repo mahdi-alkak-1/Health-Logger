@@ -1,7 +1,7 @@
 <?php 
-include('../config/connection.php');
-include("../models/User.php");
-include("ResponseService.php");
+require_once('../config/connection.php');
+require_once("../models/User.php");
+require_once("ResponseService.php");
 class AuthService{
     public static function registerUser(mysqli $connection, string $email, string $password){
         $exists = User::findByEmail($connection , $email);
