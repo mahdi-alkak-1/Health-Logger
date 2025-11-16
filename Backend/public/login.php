@@ -2,7 +2,6 @@
 
 require('../config/connection.php');
 require('../services/AuthService.php');
-require('../services/ResponseService');
 
 $input =file_get_contents('php://input');
 $data = json_decode($input, true);
