@@ -62,7 +62,20 @@ class AuthService{
         return ResponseService::response(200, "Loging Successful", $userData);
     } 
 
+     public static function getUserByToken(mysqli $connection, string $token){
+        
+        $sql = sprintf("SELECT * FROM users WHERE auth_token = ? LIMIT 1");
+        $query = $connection->prepare($sql);
+        $query->bind_param('s', $token);
+        $query->execute ();
 
+        $row = $query->get_result()->fetch_assoc();
+
+        if(!$row){
+            return null;
+        }
+        return new User($row);
+    }   
 }
 
 ?>

@@ -41,6 +41,20 @@ class User extends Model{
     // public static function updateToken(){  //// i may implement it later its impo for security issues
 
     // }
+    public static function getUserByToken(mysqli $connection, string $token){
+        
+        $sql = sprintf("SELECT * FROM users WHERE auth_token = ? LIMIT 1");
+        $query = $connection->prepare($sql);
+        $query->bind_param('s', $token);
+        $query->execute ();
+
+        $rows = $query->get_result()->fetch_row();
+
+        if(!$rows){
+            return null;
+        }
+        return new User($rows);
+    }
 
     public function getId(){
         return $this->id;
