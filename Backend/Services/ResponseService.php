@@ -7,7 +7,7 @@ class ResponseService{
         $response["status"] = $status_code;
         $response["message"] = $message;
         if($data !== null){
-             $response["userData"] = $data;
+             $response["data"] = $data;
         }
 
         return json_encode($response);
