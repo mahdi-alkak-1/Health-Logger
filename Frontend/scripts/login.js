@@ -15,7 +15,15 @@ loginBtn.addEventListener('click', async()=>{
                 headers: { 'Content-Type': 'application/json'},
             }
         );
+        
+        console.log(response.data); 
 
+        if (!response.data || response.data.status !== 200 || !response.data.data) {
+            
+            alert(response.data.message);
+            console.error('Login failed:', response.data.message);
+            return;
+        }
         const userData  = response.data.data;
         localStorage.setItem('id',userData.id);
         localStorage.setItem('token', userData.token);

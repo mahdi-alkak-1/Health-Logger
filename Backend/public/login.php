@@ -17,4 +17,4 @@ if($email === null || $password === null){
 $response = AuthService::loginUser($connection, $email, $password);
 
 echo $response;
-?>
+?>  
