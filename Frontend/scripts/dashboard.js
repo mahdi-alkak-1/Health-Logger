@@ -15,3 +15,22 @@ localStorage.removeItem("role");
 
 window.location.href = "login.html";
 });
+const rawText = document.getElementById("rawText");
+const submit = document.getElementById("submit");
+
+submit.addEventListener('click', async()=>{
+
+    try{
+        const $response = await axios.post("../Backend/public/create_entry.php",
+            {
+                raw_text: rawText.value,
+            },
+            {
+                headers: {'X-Auth-Token':localStorage.getItem('token')}
+            }
+        );
+    }catch(error){
+        console.error(error);
+    }
+
+});
