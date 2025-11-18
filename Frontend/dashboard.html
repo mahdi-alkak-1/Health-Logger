@@ -30,10 +30,15 @@
         <h3>Manage Habits</h3>
 
         <div>
-            <input id="habitName" placeholder="Habit name (ex: Sleep)" />
-            <input id="habitEntryField" placeholder="Entry field (ex: sleep_hours)" />
-            <input id="habitUnit" placeholder="Unit (hours)" />
-            <input id="habitTarget" type="number" placeholder="Target (ex: 8)" />
+        <select id="habitName">
+            <option value="sleep">Sleep (hours)</option>
+            <option value="steps">Steps</option>
+            <option value="exercise">Exercise (minutes)</option>
+            <option value="coffee">Coffee (cups)</option>
+            <option value="water">Water (liters)</option>
+            <option value="mood">Mood score</option>
+        </select>
+            <input id="habitTarget" type="number" placeholder="Target (e.g. 8)" />
             <button type="button" id="createHabitButton">Create Habit</button>
         </div>
 

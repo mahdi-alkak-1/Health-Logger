@@ -97,18 +97,41 @@ loadEntries();
 //--------------------Habits--------------------
 // ---------- Habits elements ----------
 const habitName       = document.getElementById("habitName");
-const habitEntryField = document.getElementById("habitEntryField");
-const habitUnit       = document.getElementById("habitUnit");
 const habitTarget     = document.getElementById("habitTarget");
 const createHabitBtn  = document.getElementById("createHabitButton");
 const habitsList      = document.getElementById("habitsList");
-    
+
+const habitNameToField = {
+    sleep:    'sleep_hours',
+    steps:    'steps_count',
+    exercise: 'exercise_minutes',
+    coffee:   'caffeine_cups',
+    water:    'water_liters',
+    mood:     'mood_score',
+};
+const habitNameUnit = {
+    sleep:    'hour/s',
+    steps:    'step/s',
+    exercise: 'min/s',
+    coffee:   'cup/s',
+    water:    'liter/s',
+    mood:     'm',
+};
+
 createHabitBtn.addEventListener('click', async () => {
     try {
+        const category = habitName.value;             // e.g. "exercise"
+        const entryField = habitNameToField[category]; // e.g. "exercise_minutes"
+        const categoryunit = habitNameUnit[category];
+        if (!entryField) {
+            alert("Invalid habit category");
+            return;
+        }
+
         const body = {
-            name: habitName.value,
-            entry_field: habitEntryField.value,
-            unit: habitUnit.value,
+            name: category,            // e.g. "Swimming"
+            entry_field: entryField,              // e.g. "exercise_minutes" (user never typed this)
+            unit: categoryunit,                // e.g. "minutes"
             target_value: Number(habitTarget.value),
         };
 
@@ -116,22 +139,21 @@ createHabitBtn.addEventListener('click', async () => {
             "../Backend/index.php?route=/habits/create",
             body,
             {
-                headers: { 'X-Auth-Token': localStorage.getItem('token') }
+                headers: { 'X-Auth-Token': localStorage.getItem('token') },
             }
         );
 
-        console.log('Habit create response:', response.data);
         alert(response.data.message || 'Habit created');
 
-        // Reload habits
-        await loadHabits();
+
+        await loadHabits();   // refresh list
     } catch (error) {
         console.error('Habit create error:', error);
-        // if (error.response) {
-        //     alert('Error: ' + JSON.stringify(error.response.data));
-        // } else {
-        //     alert('Error creating habit');
-        // }
+        if (error.response) {
+            alert('Error: ' + JSON.stringify(error.response.data));
+        } else {
+            alert('Error creating habit');
+        }
     }
 });
 

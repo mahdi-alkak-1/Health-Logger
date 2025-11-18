@@ -30,7 +30,7 @@ if (isset($apis[$request])) {
         );
         exit;
     }
-
+    
     //sending data to method
     $response = $controller->$method($connection, $token, $data);
 

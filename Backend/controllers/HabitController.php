@@ -28,6 +28,18 @@ class HabitController
         }
         $targetValue = (int)$data['target_value'];
 
+        $allowedFields = [
+            'sleep_hours',
+            'steps_count',
+            'exercise_minutes',
+            'caffeine_cups',
+            'water_liters',
+            'mood_score',
+        ];
+
+        if (!in_array($entryField, $allowedFields, true)) {
+            return ResponseService::response(400, "Invalid entry_field value");
+        }
 
         $habitData = [
             'user_id'      => $userId,
@@ -56,7 +68,7 @@ class HabitController
     {
         if (!$token) {
             return ResponseService::response(401, "Missing Token");
-        }
+        }   
 
         $user = AuthService::getUserByToken($connection, $token);
         if ($user === null) {
