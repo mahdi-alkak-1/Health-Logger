@@ -1,5 +1,5 @@
 <?php 
-require_once('../api/headers.php');
+require_once('headers.php');
 
 $connection = new mysqli ("localhost", "root", "", "health_db");
 

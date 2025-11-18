@@ -3,21 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Health & Habits Dashboard</title>
 </head>
 <body>
     <div>
-    <h1>Welcome to Dashboard</h1>   
-    <button type="submit" id="logoutButton">Logout</button>
+        <h1>Welcome to Dashboard</h1>
+        <button type="button" id="logoutButton">Logout</button>
     </div>
+
+    <!-- Create Entry -->
     <div>
         <h3>Create Entry</h3>
-        <textarea id="rawText" cols="50" rows="10" placeholder="ex: walked 25 min, 2 coffees, slept at 01:30"></textarea>
-        <button type="submit" id="submit">Create Entry</button>
+        <textarea id="rawText" cols="50" rows="4"
+            placeholder="ex: walked 25 min, 2 coffees, slept at 01:30"></textarea>
+        <br>
+        <button type="button" id="submit">Create Entry</button>
     </div>
-    <div>
+
+    
+    <div id="entriesSection">
         <h3>View Entries</h3>
+        <div id="entriesList"></div>
     </div>
+
+ 
+    <div id="summarySection">
+        <h3>Weekly Summary (AI)</h3>
+        <p id="summaryText">AI summary coming soon...</p>
+    </div>
+
+
+    <div id="nutritionSection">
+        <h3>Nutrition Coach</h3>
+        <p id="nutritionCoachText">Nutrition tips will appear here.</p>
+    </div>
+
     <script defer src="scripts/axios.js"></script>
     <script defer src="scripts/dashboard.js"></script>
 </body>

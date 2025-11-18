@@ -1,7 +1,6 @@
 <?php 
 
 require_once __DIR__ . '/Model.php';
-include('../config/connection.php');
 class User extends Model{
     private int $id;
     private string $email;
