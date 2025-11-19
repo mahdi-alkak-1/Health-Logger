@@ -17,7 +17,7 @@ class HabitController
         if ($user === null) {
             return ResponseService::response(401, "Unauthorized");
         }
-
+        
         $userId      = $user->getId();
         $name        = $data['name']        ?? '';
         $entryField  = $data['entry_field'] ?? '';
@@ -27,7 +27,11 @@ class HabitController
             return ResponseService::response(400, "target_value is required");
         }
         
-
+        $check = Habit::findById($connection,$userId);
+        if($check){
+            return ResponseService::response(400, "You already created this habit");
+        }
+        
         $habitData = [
             'user_id'      => $userId,
             'name'         => $name,

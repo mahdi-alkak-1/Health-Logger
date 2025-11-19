@@ -4,78 +4,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health & Habits Dashboard</title>
+    <link rel="stylesheet" href="style/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div>
-        <h1>Welcome to Dashboard</h1>
-        <button type="button" id="logoutButton">Logout</button>
-    </div>
+    <div class="app-shell">
+        <div class="app-container">
 
-    <!-- Create Entry -->
-    <div>
-        <h3>Create Entry</h3>
-        <textarea id="rawText" cols="50" rows="4"
-            placeholder="ex: walked 25 min, 2 coffees, slept at 01:30"></textarea>
-        <br>
-        <button type="button" id="submit">Create Entry</button>
-    </div>
+            <!-- Top Navigation -->
+            <div class="top-nav">
+                <div class="top-nav-left">
+                    <div class="brand-logo">
+                        <span class="brand-mark">H</span>
+                        <span class="brand-text">Health & Habit</span>
+                    </div>
+                    <div class="nav-tabs">
+                        <button class="nav-tab active" type="button" data-section="dashboard">Dashboard</button>
+                        <button class="nav-tab" type="button" data-section="habits">Habits</button>
+                        <button class="nav-tab" type="button" data-section="entries">Entries</button>
+                        <button class="nav-tab" type="button" data-section="analytics">Analytics</button>
+                    </div>
+                </div>
+                <div class="nav-actions">
+                    <button type="button" id="adminButton" class="btn-outline">Admin</button>
+                    <button type="button" id="logoutButton" class="btn-primary">Logout</button>
+                </div>
+            </div>
 
-    <!-- View + Edit/Delete Entries -->
-    <div id="entriesSection">
-        <h3>View Entries</h3>
-        <div id="entriesList"></div>
+            <!-- DASHBOARD TAB -->
+            <div id="dashboardSection" class="tab-section">
+                <div class="card">
+                    <div class="card-title">AI Summary</div>
+                    <p id="summaryText" class="summary-text">
+                        AI summary coming soon...
+                    </p>
+                </div>
 
-        <!-- Simple controls for update/delete -->
-        <h4>Update / Delete Entry</h4>
-        <input id="entryIdInput" type="number" placeholder="Entry ID" />
-        <br>
-        <textarea id="entryUpdateText" cols="40" rows="2" placeholder="New entry text (for update)"></textarea>
-        <br>
-        <button type="button" id="updateEntryButton">Update Entry</button>
-        <button type="button" id="deleteEntryButton">Delete Entry</button>
-    </div>
+                <div class="card" style="margin-top:12px;">
+                    <div class="card-title">Log Today</div>
+                    <div class="entry-create">
+                        <textarea id="rawText"
+                                  placeholder="ex: walked 25 min, 2 coffees, slept at 01:30"></textarea>
+                        <button type="button" id="submit">+ Log Entry</button>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Habits -->
-    <div>
-        <h3>Manage Habits</h3>
+            <!-- HABITS TAB -->
+            <div id="habitsSection" class="tab-section hidden">
+                <div class="card">
+                    <div class="card-title">Habits Tracker</div>
 
-        <div>
-            <select id="habitName">
-                <option value="sleep">Sleep (hours)</option>
-                <option value="steps">Steps</option>
-                <option value="exercise">Exercise (minutes)</option>
-                <option value="coffee">Coffee (cups)</option>
-                <option value="water">Water (liters)</option>
-                <option value="mood">Mood score</option>
-            </select>
-            <input id="habitTarget" type="number" placeholder="Target (e.g. 8)" />
-            <button type="button" id="createHabitButton">Create Habit</button>
+                    <div class="habits-form">
+                        <select id="habitName">
+                            <option value="sleep">Sleep (hours)</option>
+                            <option value="steps">Steps</option>
+                            <option value="exercise">Exercise (minutes)</option>
+                            <option value="coffee">Coffee (cups)</option>
+                            <option value="water">Water (liters)</option>
+                            <option value="mood">Mood score</option>
+                        </select>
+                        <input id="habitTarget" type="number" placeholder="Target (e.g. 8)">
+                        <button type="button" id="createHabitButton">+ Add Habit</button>
+                    </div>
+
+                    <h4 style="font-size:13px; margin:8px 0;">Your Habits</h4>
+                    <div id="habitsList"></div>
+
+                    <div class="habits-edit-row">
+                        <input id="habitIdInput" type="number" placeholder="Habit ID">
+                        <input id="habitNewTarget" type="number" placeholder="New Target">
+                        <button type="button" id="updateHabitButton">Update</button>
+                        <button type="button" id="deleteHabitButton">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ENTRIES TAB -->
+            <div id="entriesSection" class="tab-section hidden">
+                <div class="card">
+                    <div class="card-title">Entries Log</div>
+                    <div id="entriesList"></div>
+                </div>
+
+                <div class="card" style="margin-top:12px;">
+                    <div class="card-title">Edit / Delete Entry</div>
+                   <div class="entry-edit">
+                        <div class="entry-edit-row">
+                            <input id="entryIdInput" type="number" placeholder="Entry ID">
+                            <textarea id="entryUpdateText" rows="2"
+                                    placeholder="New entry text (for update)"></textarea>
+                        </div>
+                        <div class="entry-edit-buttons">
+                            <button type="button" id="updateEntryButton" class="update">Update</button>
+                            <button type="button" id="deleteEntryButton" class="delete">Delete</button>
+                          </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALYTICS TAB -->
+            <div id="analyticsSection" class="tab-section hidden">
+                <div class="card">
+                    <div class="card-title">Analytics</div>
+
+                    <div class="charts-wrapper">
+                        <div class="chart-container">
+                            <div style="font-size:12px; margin-bottom:4px;">Weekly Progress</div>
+                            <canvas id="weeklyChart" width="400" height="160"></canvas>
+                        </div>
+
+                        <div class="chart-container">
+                            <div style="font-size:12px; margin-bottom:4px;">Monthly Progress</div>
+                            <canvas id="monthlyChart" width="400" height="160"></canvas>
+                        </div>
+                            <p class="chart-hint">
+                                Tip: click on legend labels (for example <strong>Steps</strong>) to hide/show lines and
+                                see Exercise & Coffee more clearly.
+                            </p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:12px;">
+                    <div class="card-title">Nutrition Coach</div>
+                    <p id="nutritionCoachText" class="nutrition-text">
+                        Nutrition tips will appear here.
+                    </p>
+                </div>
+            </div>
+
         </div>
-
-        <h4>Your Habits</h4>
-        <div id="habitsList"></div>
-
-        <!-- Simple controls for update/delete habit -->
-        <h4>Update / Delete Habit</h4>
-        <input id="habitIdInput" type="number" placeholder="Habit ID" />
-        <input id="habitNewTarget" type="number" placeholder="New Target" />
-        <button type="button" id="updateHabitButton">Update Habit</button>
-        <button type="button" id="deleteHabitButton">Delete Habit</button>
-    </div>
-
-    <div id="summarySection">
-        <h3>Weekly Summary (AI)</h3>
-        <p id="summaryText">AI summary coming soon...</p>
-    </div>
-
-    <div id="nutritionSection">
-        <h3>Nutrition Coach</h3>
-        <p id="nutritionCoachText">Nutrition tips will appear here.</p>
     </div>
 
     <script defer src="scripts/axios.js"></script>
     <script defer src="scripts/dashboard.js"></script>
     <script defer src="scripts/entry.js"></script>
     <script defer src="scripts/habit.js"></script>
+    <script defer src="scripts/charts.js"></script>
+    <script defer src="scripts/summary.js"></script>
 </body>
+
 </html>

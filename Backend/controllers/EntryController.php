@@ -190,5 +190,55 @@ class EntryController
 
         return ResponseService::response(404, "Entry not found or not deleted");
     }
+
+    public function stats(mysqli $connection, ?string $token, array $data): string
+    {
+        if (!$token) {
+            return ResponseService::response(401, "Missing Token");
+        }
+
+        $user = AuthService::getUserByToken($connection, $token);
+        if ($user === null) {
+            return ResponseService::response(401, "Unauthorized");
+        }
+
+        $userId = $user->getId();
+        $period = $data['period'] ?? 'week';
+
+        if ($period === 'month') {
+            $interval = '30 DAY';
+        } else {
+            $interval = '7 DAY';
+        }
+
+        $sql = "
+            SELECT
+                DATE(created_at) AS day,
+                AVG(sleep_hours)      AS sleep_hours,
+                SUM(steps_count)      AS steps_count,
+                SUM(exercise_minutes) AS exercise_minutes,
+                SUM(caffeine_cups)    AS caffeine_cups,
+                AVG(water_liters)     AS water_liters,
+                AVG(mood_score)       AS mood_score
+            FROM entries
+            WHERE user_id = ?
+            AND created_at >= DATE_SUB(CURDATE(), INTERVAL $interval)
+            GROUP BY DATE(created_at)
+            ORDER BY day ASC
+        ";
+
+        $stmt = $connection->prepare($sql);
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+
+        return ResponseService::response(200, "Stats fetched", $rows);
+    }
+
 }
     

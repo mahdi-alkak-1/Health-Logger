@@ -3,19 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Health & Habit Logger</title>
     <link rel="stylesheet" href="style/style.css">
-    <title>Login</title>
 </head>
 <body>
-    <div class="login">
-        <h1>Login</h1>
-        <label for="emailInput">Email:</label>
-        <input  type="email" id="emailInput" placeholder="Enter your email"/>
-        <label for="passwordInput">Password:</label>
-        <input  type="password" id="passwordInput" placeholder="Enter your password"/>
-        <button type="submit" id="loginButton">Login</button>
-        <!-- <pre id="loginMessage"></pre> -->
+    <div class="auth-shell">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <span class="auth-logo-dot"></span>
+                <span class="auth-brand-text">Health & Habit Logger</span>
+            </div>
+
+            <h2 class="auth-heading">Log in</h2>
+            <p class="auth-subtitle">
+                Track your sleep, steps, mood and more in one place.
+            </p>
+
+            <div class="auth-form-group">
+                <label class="auth-label" for="emailInput">Email</label>
+                <input class="auth-input" id="emailInput" type="email" placeholder="Enter your email">
+            </div>
+
+            <div class="auth-form-group">
+                <label class="auth-label" for="passwordInput">Password</label>
+                <input class="auth-input" id="passwordInput" type="password" placeholder="Enter your password">
+            </div>
+
+            <button class="auth-btn" id="loginButton" type="button">Login</button>
+
+            <p class="auth-footer-text">
+                Don't have an account?
+                <a href="register.html" class="auth-link">Register</a>
+            </p>
+        </div>
     </div>
+
     <script defer src="scripts/axios.js"></script>
     <script defer src="scripts/login.js"></script>
 </body>

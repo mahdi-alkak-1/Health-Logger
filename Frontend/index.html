@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health & Habit Logger</title>
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+    <div class="landing-shell">
+        <header class="landing-header">
+            <div class="landing-logo">
+                <div class="brand-mark">H</div>
+                <span class="brand-text">Health & Habit Logger</span>
+            </div>
+
+            <nav class="landing-nav-links">
+                <a href="#features">Features</a>
+                <a href="#ai">AI Coach</a>
+                <a href="#how-it-works">How it works</a>
+            </nav>
+
+            <div class="landing-nav-actions">
+                <a href="login.html" class="landing-link">Login</a>
+                <a href="register.html" class="landing-cta-small">Sign up</a>
+            </div>
+        </header>
+
+        <main class="landing-main">
+            <section class="landing-hero">
+                <div class="landing-hero-text">
+                    <h1>Turn your daily notes into<br>smart health insights.</h1>
+                    <p>
+                        Just write “walked 25 min, 2 coffees, slept at 01:30” - 
+                        we parse it, track it, and show you clear trends for sleep,
+                        movement, caffeine, mood and more.
+                    </p>
+
+                    <div class="landing-hero-actions">
+                        <a href="register.html" class="landing-cta-main">
+                            Start Logging in 30 seconds
+                        </a>
+                        <a href="login.html" class="landing-ghost-link">
+                            Already have an account?
+                        </a>
+                    </div>
+
+                    <ul class="landing-bullets">
+                        <li>Free-text entry - no complicated forms.</li>
+                        <li>AI weekly summary & nutrition suggestions.</li>
+                        <li>Clean dashboard with charts & habit tracker.</li>
+                    </ul>
+                </div>
+
+                <div class="landing-hero-preview">
+                    <div class="landing-preview-card">
+                        <div class="landing-preview-header">
+                            <span>Today</span>
+                            <span class="landing-preview-pill">AI Summary</span>
+                        </div>
+                        <p class="landing-preview-text">
+                            “You averaged <strong>7.2h of sleep</strong> and 
+                            <strong>9,340 steps</strong> this week.  
+                            Try moving your last coffee one hour earlier to improve sleep quality.”
+                        </p>
+
+                        <div class="landing-mini-grid">
+                            <div class="landing-mini-stat">
+                                <span class="label">Sleep</span>
+                                <span class="value">7.2 h</span>
+                            </div>
+                            <div class="landing-mini-stat">
+                                <span class="label">Steps</span>
+                                <span class="value">9,340</span>
+                            </div>
+                            <div class="landing-mini-stat">
+                                <span class="label">Mood</span>
+                                <span class="value">7/10</span>
+                            </div>
+                            <div class="landing-mini-stat">
+                                <span class="label">Caffeine</span>
+                                <span class="value">2 cups</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="features" class="landing-section">
+                <h2>Everything you need to track your habits - without friction.</h2>
+                <div class="landing-feature-grid">
+                    <div class="landing-feature-card">
+                        <h3>Free-text logging</h3>
+                        <p>Type your day in one sentence. We use AI to extract sleep, steps, exercise, water and mood.</p>
+                    </div>
+                    <div class="landing-feature-card">
+                        <h3>Smart habits</h3>
+                        <p>Create targets for sleep, steps or water and see how many days you hit your goals.</p>
+                    </div>
+                    <div class="landing-feature-card">
+                        <h3>Clear analytics</h3>
+                        <p>Weekly and monthly charts with separate scales for steps vs. other metrics.</p>
+                    </div>
+                    <div class="landing-feature-card">
+                        <h3>Admin-ready</h3>
+                        <p>Admin panel to review all users entries and habits for demos or grading.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ai" class="landing-section landing-section-soft">
+                <h2>Your AI health companion</h2>
+                <p class="landing-section-text">
+                    Every week, the app generates a short summary and one concrete suggestion to improve your
+                    routine. A separate nutrition coach card looks at your latest entry and suggests a healthier
+                    next meal.
+                </p>
+            </section>
+
+            <section id="how-it-works" class="landing-section">
+                <h2>How it works</h2>
+                <ol class="landing-steps">
+                    <li><strong>Sign up</strong> with your email and password.</li>
+                    <li><strong>Log your day</strong> in natural language.</li>
+                    <li><strong>Review charts</strong> and AI summaries on your dashboard.</li>
+                    <li><strong>Adjust habits</strong> and repeat - watch the trends improve.</li>
+                </ol>
+            </section>
+        </main>
+
+        <footer class="landing-footer">
+            <span>© <span id="yearSpan"></span> Health & Habit Logger</span>
+            <span class="landing-footer-small">Built with HTML, CSS, JS, PHP & MySQL</span>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('yearSpan').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-// entry.js
+
 
 const rawText     = document.getElementById("rawText");
 const submit      = document.getElementById("submit");
@@ -25,7 +25,6 @@ submit.addEventListener('click', async () => {
         console.log('Entry response:', response.data);
         alert(response.data.message || 'Entry created');
 
-        rawText.value = '';
 
         await loadEntries();
     } catch (error) {
@@ -76,7 +75,7 @@ async function loadEntries() {
 
             // first line: ID + date
             const header = document.createElement('div');
-            header.innerHTML = `<strong>ID: ${id}</strong> – ${createdAt}`;
+            header.innerHTML = `<strong>ID: ${id}</strong> - ${createdAt}`;
 
             // second line: text
             const body = document.createElement('div');

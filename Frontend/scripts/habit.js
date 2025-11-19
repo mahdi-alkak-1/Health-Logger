@@ -1,11 +1,10 @@
-// habit.js
 
 const habitName       = document.getElementById("habitName");
 const habitTarget     = document.getElementById("habitTarget");
 const createHabitBtn  = document.getElementById("createHabitButton");
 const habitsList      = document.getElementById("habitsList");
 
-// NEW controls for update/delete
+// update/delete Habits
 const habitIdInput   = document.getElementById("habitIdInput");
 const habitNewTarget = document.getElementById("habitNewTarget");
 const updateHabitBtn = document.getElementById("updateHabitButton");
@@ -29,12 +28,14 @@ const habitNameUnit = {
     mood:     'm',
 };
 
+let lastHabits = [];
+
 // ------------------ create habit ------------------
 createHabitBtn.addEventListener('click', async () => {
     try {
-        const category    = habitName.value;
-        const entryField  = habitNameToField[category];
-        const categoryunit = habitNameUnit[category];
+        const category     = habitName.value;
+        const entryField   = habitNameToField[category];
+        const categoryUnit = habitNameUnit[category];
 
         if (!entryField) {
             alert("Invalid habit category");
@@ -46,10 +47,19 @@ createHabitBtn.addEventListener('click', async () => {
             return;
         }
 
+        // prevent duplicates: user can only have ONE habit per entry_field
+        const alreadyExists = lastHabits.some(
+            h => h.entry_field === entryField && Number(h.is_active) === 1
+        );
+        if (alreadyExists) {
+            alert("You already created this habit for this metric.");
+            return;
+        }
+
         const body = {
-            name: category,
-            entry_field: entryField,
-            unit: categoryunit,
+            name:         category,
+            entry_field:  entryField,
+            unit:         categoryUnit,
             target_value: Number(habitTarget.value),
         };
 
@@ -86,10 +96,12 @@ async function loadHabits() {
 
         if (!response.data || response.data.status !== 200) {
             habitsList.innerHTML = `<p>${response.data?.message || 'Failed to load habits'}</p>`;
+            lastHabits = [];
             return;
         }
 
         const habits = response.data.data || [];
+        lastHabits = habits; // cache for duplicate check
 
         if (habits.length === 0) {
             habitsList.innerHTML = '<p>No habits yet. Create one above!</p>';
@@ -101,7 +113,7 @@ async function loadHabits() {
             const id = habit.id;
 
             html += `
-                <div class="habit-card" style="border:1px solid #ccc; padding:6px; margin-bottom:4px;">
+                <div class="habit-card">
                     <div>
                         <strong>ID: ${id}</strong> – ${habit.name} 
                         (<code>${habit.entry_field}</code>) – target: 
@@ -115,6 +127,7 @@ async function loadHabits() {
     } catch (error) {
         console.error('Load habits error:', error);
         habitsList.innerHTML = '<p>Error loading habits.</p>';
+        lastHabits = [];
     }
 }
 
@@ -144,8 +157,6 @@ deleteHabitBtn.addEventListener('click', async () => {
         console.log('Delete habit response:', response.data);
         alert(response.data.message || 'Habit deleted');
 
-        habitIdInput.value = '';
-        habitNewTarget.value = '';
         await loadHabits();
     } catch (error) {
         console.error('Delete habit error:', error);
@@ -155,8 +166,8 @@ deleteHabitBtn.addEventListener('click', async () => {
 
 // ------------------ update habit target by ID ------------------
 updateHabitBtn.addEventListener('click', async () => {
-    const habitId    = habitIdInput.value;
-    const newTarget  = habitNewTarget.value;
+    const habitId   = habitIdInput.value;
+    const newTarget = habitNewTarget.value;
 
     if (!habitId) {
         alert("Please enter a Habit ID to update");
@@ -171,7 +182,7 @@ updateHabitBtn.addEventListener('click', async () => {
         const response = await axios.post(
             "../Backend/index.php?route=/habits/update",
             {
-                habit_id: Number(habitId),
+                habit_id:     Number(habitId),
                 target_value: Number(newTarget)
             },
             {
