@@ -1,5 +1,5 @@
 <?php
 
-const OPENAI_API_KEY = 'Key';
+const OPENAI_API_KEY = ;
 
 ?>
