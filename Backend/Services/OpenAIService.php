@@ -1,22 +1,10 @@
 <?php
-
+require_once __DIR__ . '/../config/headers.php';
 require_once __DIR__ . '/../config/openai.php';
 
 class OpenAIService
 {
-    /**
-     * Parse a free-text health log into structured fields.
-     *
-     * Expected JSON object from the model:
-     * {
-     *   "sleep_hours": number or null,
-     *   "steps_count": number or null,
-     *   "exercise_minutes": number or null,
-     *   "caffeine_cups": number or null,
-     *   "water_liters": number or null,
-     *   "mood_score": number or null
-     * }
-     */
+
     public static function parseEntryText(string $rawText): ?array
     {
         $system = <<<SYS
@@ -109,5 +97,88 @@ SYS;
         ];
 
         return $result;
+    }
+
+     public static function weeklySummary(array $entries): string
+    {
+        $system = "You are a friendly health coach. 
+Summarize the last week for this user, focusing on sleep, steps, exercise, caffeine, water and mood.
+Write 3-6 sentences in simple English. Be encouraging and give ONE concrete suggestion to improve next week.";
+
+        $userContent = json_encode($entries, JSON_UNESCAPED_SLASHES);
+
+        $payload = [
+            'model' => 'gpt-4o-mini',
+            'messages' => [
+                ['role' => 'system', 'content' => $system],
+                ['role' => 'user',   'content' => "Here is the user's last week of health entries as JSON: " . $userContent],
+            ],
+            'temperature' => 0.7,
+        ];
+
+        $ch = curl_init('https://api.openai.com/v1/chat/completions');
+        curl_setopt_array($ch, [
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . OPENAI_API_KEY
+            ],
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode($payload),
+            CURLOPT_RETURNTRANSFER => true,
+        ]);
+        $resp = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $err  = curl_error($ch);
+        curl_close($ch);
+
+        if ($resp === false || $code !== 200) {
+            return "Sorry, I couldn't generate a summary right now.";
+        }
+
+        $j = json_decode($resp, true);
+        $content = $j['choices'][0]['message']['content'] ?? '';
+        return trim($content);
+    }
+
+    // 🔹 NEW: nutrition coach
+    public static function nutritionCoach(array $entry): string
+    {
+        $system = "You are an AI nutrition coach. 
+            Based on the user's recent habits, give a short, practical suggestion for their next healthy meal.
+            Be specific but simple. 2-4 sentences max.";
+
+        $userContent = json_encode($entry, JSON_UNESCAPED_SLASHES);
+
+        $payload = [
+            'model' => 'gpt-4o-mini',
+            'messages' => [
+                ['role' => 'system', 'content' => $system],
+                ['role' => 'user',   'content' => "Here is the user's recent entry as JSON: " . $userContent],
+            ],
+            'temperature' => 0.7,
+        ];
+
+        $ch = curl_init('https://api.openai.com/v1/chat/completions');
+        curl_setopt_array($ch, [
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . OPENAI_API_KEY
+            ],
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode($payload),
+            CURLOPT_RETURNTRANSFER => true,
+        ]);
+        $resp = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $err  = curl_error($ch);
+        curl_close($ch);
+
+        if ($resp === false || $code !== 200) {
+            return "Sorry, I couldn't generate nutrition advice right now.";
+        }
+
+        $j = json_decode($resp, true);
+        $content = $j['choices'][0]['message']['content'] ?? '';
+        return trim($content);
     }
 }
