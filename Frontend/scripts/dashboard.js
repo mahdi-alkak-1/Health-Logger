@@ -1,4 +1,3 @@
-// dashboard.js
 
 // ------------------ auth & logout ------------------
 const localtoken = localStorage.getItem("token");
@@ -20,17 +19,20 @@ logoutbtn.addEventListener('click', () => {
 
 // ------------------ admin button ------------------
 const adminBtn = document.getElementById('adminButton');
-if (adminBtn) {
-    adminBtn.addEventListener('click', () => {
-        const role = localStorage.getItem('role');
-        if (role === 'admin') {
-            window.location.href = 'admin.html';
-        } else {
-            alert('Admin only');
-        }
-    });
-}
 
+if (adminBtn) {
+    const role = localStorage.getItem('role');
+
+    if (role !== 'admin') {
+        // hide completely if not admin
+        adminBtn.style.display = 'none';
+    } else {
+        // only admins can see + click it
+        adminBtn.addEventListener('click', () => {
+            window.location.href = 'admin.html';
+        });
+    }
+}
 // ------------------ tab navigation ------------------
 const navTabs = document.querySelectorAll('.nav-tab');
 const sections = {
