@@ -22,24 +22,11 @@ class HabitController
         $name        = $data['name']        ?? '';
         $entryField  = $data['entry_field'] ?? '';
         $unit        = $data['unit']        ?? '';
-
-        if ($name === '' || $entryField === '' || $unit === '' || !isset($data['target_value'])) {
-            return ResponseService::response(400, "name, entry_field, unit and target_value are required");
-        }
         $targetValue = (int)$data['target_value'];
-
-        $allowedFields = [
-            'sleep_hours',
-            'steps_count',
-            'exercise_minutes',
-            'caffeine_cups',
-            'water_liters',
-            'mood_score',
-        ];
-
-        if (!in_array($entryField, $allowedFields, true)) {
-            return ResponseService::response(400, "Invalid entry_field value");
+        if ($name === '' || $entryField === '' || $unit === '' ||  $targetValue == 0 || $targetValue == '') {
+            return ResponseService::response(400, "target_value is required");
         }
+        
 
         $habitData = [
             'user_id'      => $userId,

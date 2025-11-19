@@ -7,7 +7,7 @@ $sql = "CREATE TABLE IF NOT EXISTS habits(
         name VARCHAR(255) NOT NULL,
         entry_field VARCHAR(255) NOT NULL,
         unit VARCHAR(255) NOT NULL,
-        target_value INT(11),
+        target_value INT(11) NOT NULL,
         is_active BOOLEAN NOT NULL DEFAULT 1,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

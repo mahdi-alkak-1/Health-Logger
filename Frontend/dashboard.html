@@ -20,37 +20,53 @@
         <button type="button" id="submit">Create Entry</button>
     </div>
 
-    
+    <!-- View + Edit/Delete Entries -->
     <div id="entriesSection">
         <h3>View Entries</h3>
         <div id="entriesList"></div>
+
+        <!-- Simple controls for update/delete -->
+        <h4>Update / Delete Entry</h4>
+        <input id="entryIdInput" type="number" placeholder="Entry ID" />
+        <br>
+        <textarea id="entryUpdateText" cols="40" rows="2" placeholder="New entry text (for update)"></textarea>
+        <br>
+        <button type="button" id="updateEntryButton">Update Entry</button>
+        <button type="button" id="deleteEntryButton">Delete Entry</button>
     </div>
 
+    <!-- Habits -->
     <div>
         <h3>Manage Habits</h3>
 
         <div>
-        <select id="habitName">
-            <option value="sleep">Sleep (hours)</option>
-            <option value="steps">Steps</option>
-            <option value="exercise">Exercise (minutes)</option>
-            <option value="coffee">Coffee (cups)</option>
-            <option value="water">Water (liters)</option>
-            <option value="mood">Mood score</option>
-        </select>
+            <select id="habitName">
+                <option value="sleep">Sleep (hours)</option>
+                <option value="steps">Steps</option>
+                <option value="exercise">Exercise (minutes)</option>
+                <option value="coffee">Coffee (cups)</option>
+                <option value="water">Water (liters)</option>
+                <option value="mood">Mood score</option>
+            </select>
             <input id="habitTarget" type="number" placeholder="Target (e.g. 8)" />
             <button type="button" id="createHabitButton">Create Habit</button>
         </div>
 
         <h4>Your Habits</h4>
         <div id="habitsList"></div>
+
+        <!-- Simple controls for update/delete habit -->
+        <h4>Update / Delete Habit</h4>
+        <input id="habitIdInput" type="number" placeholder="Habit ID" />
+        <input id="habitNewTarget" type="number" placeholder="New Target" />
+        <button type="button" id="updateHabitButton">Update Habit</button>
+        <button type="button" id="deleteHabitButton">Delete Habit</button>
     </div>
 
     <div id="summarySection">
         <h3>Weekly Summary (AI)</h3>
         <p id="summaryText">AI summary coming soon...</p>
     </div>
-
 
     <div id="nutritionSection">
         <h3>Nutrition Coach</h3>
@@ -59,5 +75,7 @@
 
     <script defer src="scripts/axios.js"></script>
     <script defer src="scripts/dashboard.js"></script>
+    <script defer src="scripts/entry.js"></script>
+    <script defer src="scripts/habit.js"></script>
 </body>
 </html>

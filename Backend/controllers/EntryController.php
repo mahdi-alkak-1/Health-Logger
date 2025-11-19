@@ -1,13 +1,13 @@
 <?php
-// Backend/controllers/EntryController.php
 
 require_once __DIR__ . '/../services/AuthService.php';
 require_once __DIR__ . '/../services/ResponseService.php';
+require_once __DIR__ . '/../services/OpenAIService.php';
 require_once __DIR__ . '/../models/Entry.php';
 
 class EntryController
 {
-    // CREATE: /entries/create
+   
     public function createEntry(mysqli $connection, ?string $token, array $data): string
     {
         //Check token for authentication purpose
@@ -25,6 +25,12 @@ class EntryController
         if ($rawText === null || trim($rawText) === '') {
             return ResponseService::response(400, "raw_text is required");
         }
+        $sleep_hours = $data['sleep_hours'] ?? null;
+        $steps_count = $data['steps_count'] ?? null;
+        $exercise_minutes = $data['exercise_minutes'] ?? null;
+        $caffeine_cups = $data['caffeine_cups'] ?? null;
+        $water_liters = $data['water_liters'] ?? null;
+        $mood_score = $data['mood_score'] ?? null;
 
         $userId = $user->getId();
 
@@ -32,12 +38,12 @@ class EntryController
         $entryData = [
             'user_id'          => $userId,
             'raw_text'         => $rawText,
-            'sleep_hours'      => null,
-            'steps_count'      => null,
-            'exercise_minutes' => null,
-            'caffeine_cups'    => null,
-            'water_liters'     => null,
-            'mood_score'       => null,
+            'sleep_hours'      => $sleep_hours,
+            'steps_count'      => $steps_count,
+            'exercise_minutes' => $exercise_minutes,
+            'caffeine_cups'    => $caffeine_cups,
+            'water_liters'     => $water_liters,
+            'mood_score'       => $mood_score,
         ];
 
         $entryId = Entry::create($connection, $entryData);
@@ -175,10 +181,10 @@ class EntryController
         }
 
         $sql = "DELETE FROM entries WHERE id = ? AND user_id = ?";
-        $stmt = $connection->prepare($sql);
-        $stmt->bind_param('ii', $entryId, $userId);
+        $input = $connection->prepare($sql);
+        $input->bind_param('ii', $entryId, $userId);
 
-        if ($stmt->execute() && $stmt->affected_rows > 0) {
+        if ($input->execute() && $input->affected_rows > 0) {
             return ResponseService::response(200, "Entry deleted");
         }
 

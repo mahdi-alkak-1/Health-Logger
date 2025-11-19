@@ -1,6 +1,6 @@
 <?php
-// Backend/index.php
 
+require_once __DIR__ . '/services/OpenAiService.php';
 require_once __DIR__ . '/services/ResponseService.php';
 require_once __DIR__ . '/routes/web.php';
 require_once __DIR__ . '/config/connection.php';
@@ -30,7 +30,13 @@ if (isset($apis[$request])) {
         );
         exit;
     }
-    
+    if($method === "createEntry"){
+        $resp = OpenAIService::parseEntryText($data['raw_text']);
+        $resp['raw_text'] = $data['raw_text'];
+        $response = $controller->$method($connection,$token,$resp);
+        echo $response;
+        exit;
+    }
     //sending data to method
     $response = $controller->$method($connection, $token, $data);
 
