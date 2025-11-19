@@ -13,7 +13,7 @@ class Entry extends Model{
     private int $exercise_minutes;
     private int  $caffeine_cups;
     private float $water_liters;
-    private int $mood_score;
+    private string $mood;
     private string $created_at;
     private string $updated_at;
 
@@ -30,7 +30,7 @@ class Entry extends Model{
         $this->exercise_minutes = $data["exercise_minutes"];
         $this->caffeine_cups = $data["caffeine_cups"];
         $this->water_liters = $data["water_liters"];
-        $this->mood_score = $data["mood_score"];
+        $this->mood = $data["mood"];
         $this->created_at = $data["created_at"];
         $this->updated_at = $data["updated_at"];
     }
@@ -46,7 +46,7 @@ class Entry extends Model{
                 "exercise_minutes" => $this->exercise_minutes,
                 "caffeine_cups" => $this->caffeine_cups,
                 "water_liters" => $this->water_liters,
-                "mood_score" => $this->mood_score,
+                "mood" => $this->mood,
                 "created_at" => $this->created_at,
                 "updated_at" => $this->updated_at
             ];

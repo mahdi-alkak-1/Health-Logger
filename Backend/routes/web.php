@@ -36,4 +36,7 @@ $apis = [
         'controller' => 'HabitController',
         'method'     => 'deleteHabit',
     ],
+    
+  
+    
 ];

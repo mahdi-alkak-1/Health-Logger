@@ -22,12 +22,11 @@ class HabitController
         $name        = $data['name']        ?? '';
         $entryField  = $data['entry_field'] ?? '';
         $unit        = $data['unit']        ?? '';
-
-        if ($name === '' || $entryField === '' || $unit === '' || !isset($data['target_value'])) {
-            return ResponseService::response(400, "name, entry_field, unit and target_value are required");
-        }
         $targetValue = (int)$data['target_value'];
-
+        if ($name === '' || $entryField === '' || $unit === '' ||  $targetValue == 0 || $targetValue == '') {
+            return ResponseService::response(400, "target_value is required");
+        }
+        
 
         $habitData = [
             'user_id'      => $userId,
@@ -56,7 +55,7 @@ class HabitController
     {
         if (!$token) {
             return ResponseService::response(401, "Missing Token");
-        }
+        }   
 
         $user = AuthService::getUserByToken($connection, $token);
         if ($user === null) {
