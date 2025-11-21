@@ -2,12 +2,13 @@
 
 require_once __DIR__ . '/../services/AuthService.php';
 require_once __DIR__ . '/../services/ResponseService.php';
+require_once __DIR__ . '/../services/EntryService.php';
 require_once __DIR__ . '/../services/OpenAIService.php';
 require_once __DIR__ . '/../models/Entry.php';
 
 class EntryController
 {
-   
+     
     public function createEntry(mysqli $connection, ?string $token, array $data): string
     {
         //Check token for authentication purpose
@@ -20,31 +21,14 @@ class EntryController
             return ResponseService::response(401, "Unauthorized");
         }
 
-       
+        $userId = $user->getId();
         $rawText = $data['raw_text'] ?? null;
         if ($rawText === null || trim($rawText) === '') {
             return ResponseService::response(400, "raw_text is required");
         }
-        $sleep_hours = $data['sleep_hours'] ?? null;
-        $steps_count = $data['steps_count'] ?? null;
-        $exercise_minutes = $data['exercise_minutes'] ?? null;
-        $caffeine_cups = $data['caffeine_cups'] ?? null;
-        $water_liters = $data['water_liters'] ?? null;
-        $mood_score = $data['mood_score'] ?? null;
 
-        $userId = $user->getId();
-
-        
-        $entryData = [
-            'user_id'          => $userId,
-            'raw_text'         => $rawText,
-            'sleep_hours'      => $sleep_hours,
-            'steps_count'      => $steps_count,
-            'exercise_minutes' => $exercise_minutes,
-            'caffeine_cups'    => $caffeine_cups,
-            'water_liters'     => $water_liters,
-            'mood_score'       => $mood_score,
-        ];
+        $entryData = [];
+        $entryData = EntryService::initData($userId, $data, $rawText);
 
         $entryId = Entry::create($connection, $entryData);
 
@@ -74,17 +58,7 @@ class EntryController
 
         $userId = $user->getId();
 
-        $sql = "SELECT * FROM entries WHERE user_id = ? ORDER BY created_at DESC";
-        $input = $connection->prepare($sql);
-        $input->bind_param('i', $userId);
-        $input->execute();
-        $result = $input->get_result();
-
-        $entries = [];
-        while ($row = $result->fetch_assoc()) {
-            //entering row by row into entries
-            $entries[] = $row;
-        }
+        $entries = EntryService::getEntries($connection, $userId);
 
         return ResponseService::response(200, "Entries fetched", $entries);
     }
@@ -123,41 +97,11 @@ class EntryController
             return ResponseService::response(400, "raw_text is required");
         }
         //Getting the new data from user
-        $sleep_hours      = $data['sleep_hours']      ?? null;
-        $steps_count      = $data['steps_count']      ?? null;
-        $exercise_minutes = $data['exercise_minutes'] ?? null;
-        $caffeine_cups    = $data['caffeine_cups']    ?? null;
-        $water_liters     = $data['water_liters']     ?? null;
-        $mood_score       = $data['mood_score']       ?? null;
-
-        $sql = "UPDATE entries
-                SET raw_text = ?, 
-                    sleep_hours = ?, 
-                    steps_count = ?, 
-                    exercise_minutes = ?, 
-                    caffeine_cups = ?, 
-                    water_liters = ?, 
-                    mood_score = ?
-                WHERE id = ? AND user_id = ?";
-
-        $input = $connection->prepare($sql);
-        $input->bind_param(
-            'sdiiiiidi',
-            $rawText,
-            $sleep_hours,
-            $steps_count,
-            $exercise_minutes,
-            $caffeine_cups,
-            $water_liters,
-            $mood_score,
-            $entryId,
-            $userId
-        );
-
-        if ($input->execute()) {
-            return ResponseService::response(200, "Entry updated");
+ 
+        $yes = EntryService::updateEntries($connection, $rawText,$userId, $entryId, $data);
+        if($yes){
+            return  ResponseService::response(200, "Entry updated");
         }
-
         return ResponseService::response(500, "Failed to update entry");
     }
 
@@ -208,7 +152,7 @@ class EntryController
         if ($period === 'month') {
             $interval = '30 DAY';
         } else {
-            $interval = '7 DAY';
+            $interval = '8 DAY';
         }
 
         $sql = "

@@ -48,10 +48,11 @@ createHabitBtn.addEventListener('click', async () => {
         }
 
         // prevent duplicates: user can only have ONE habit per entry_field
-        const alreadyExists = lastHabits.some(
+        const alreadyExistsEntryField = lastHabits.some(
             h => h.entry_field === entryField && Number(h.is_active) === 1
         );
-        if (alreadyExists) {
+
+        if (alreadyExistsEntryField) {
             alert("You already created this habit for this metric.");
             return;
         }
@@ -80,7 +81,7 @@ createHabitBtn.addEventListener('click', async () => {
         alert('Error creating habit');
     }
 });
-
+console.log(lastHabits);            
 //-------------------- habit list -------------------
 async function loadHabits() {
     try {
@@ -103,6 +104,7 @@ async function loadHabits() {
         const habits = response.data.data || [];
         lastHabits = habits; // cache for duplicate check
 
+        console.log(lastHabits);
         if (habits.length === 0) {
             habitsList.innerHTML = '<p>No habits yet. Create one above!</p>';
             return;
@@ -148,7 +150,7 @@ deleteHabitBtn.addEventListener('click', async () => {
     try {
         const response = await axios.post(
             "../Backend/index.php?route=/habits/delete",
-            { habit_id: Number(habitId) },
+            { id: Number(habitId) },
             {
                 headers: { 'X-Auth-Token': localStorage.getItem('token') }
             }

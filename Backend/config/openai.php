@@ -1,5 +1,5 @@
 <?php
 
-const OPENAI_API_KEY = ;
+const OPENAI_API_KEY = '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';
 
 ?>
