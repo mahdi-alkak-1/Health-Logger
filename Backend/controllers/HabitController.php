@@ -1,5 +1,5 @@
 <?php
-
+require_once __DIR__ . '/../services/HabitService.php';
 require_once __DIR__ . '/../services/AuthService.php';
 require_once __DIR__ . '/../services/ResponseService.php';
 require_once __DIR__ . '/../models/Habit.php';
@@ -19,17 +19,17 @@ class HabitController
         }
         
         $userId      = $user->getId();
-        $name        = $data['name']        ?? '';
+        $name        = $data['name']        ?? '';        
         $entryField  = $data['entry_field'] ?? '';
         $unit        = $data['unit']        ?? '';
         $targetValue = (int)$data['target_value'];
-        if ($name === '' || $entryField === '' || $unit === '' ||  $targetValue == 0 || $targetValue == '') {
-            return ResponseService::response(400, "target_value is required");
+        $check = HabitService::IsActive($connection, $name, $targetValue);
+        if($check){
+            exit;
         }
         
-        $check = Habit::findById($connection,$userId);
-        if($check){
-            return ResponseService::response(400, "You already created this habit");
+        if ($name === '' || $entryField === '' || $unit === '' ||  $targetValue == 0 || $targetValue == '') {
+            return ResponseService::response(400, "target_value is required");
         }
         
         $habitData = [
@@ -67,17 +67,8 @@ class HabitController
         }
 
         $userId = $user->getId();
+        $habits = HabitService::getHabits($connection, $userId);
 
-        $sql = "SELECT * FROM habits WHERE user_id = ? AND is_active = 1 ORDER BY created_at DESC";
-        $input = $connection->prepare($sql);
-        $input->bind_param('i', $userId);
-        $input->execute();
-        $result = $input->get_result();
-
-        $habits = [];
-        while ($row = $result->fetch_assoc()) {
-            $habits[] = $row;
-        }
 
         return ResponseService::response(200, "Habits fetched", $habits);
     }

@@ -1,4 +1,3 @@
-// summary.js
 
 const summaryTextEl   = document.getElementById('summaryText');
 const nutritionTextEl = document.getElementById('nutritionCoachText');
